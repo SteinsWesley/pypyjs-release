@@ -225,6 +225,35 @@ def test(HandlerClass = SimpleHTTPRequestHandler,
          ServerClass = BaseHTTPServer.HTTPServer):
     BaseHTTPServer.test(HandlerClass, ServerClass)
 
+def test2(HandlerClass=SimpleHTTPRequestHandler,
+         ServerClass=BaseHTTPServer.HTTPServer):
+
+    protocol = "HTTP/1.0"
+    host = commands.getoutput('hostname -i')
+    hostname = commands.getoutput('hostname')
+    port = 8091
+    '''
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        if ':' in arg:
+            host, port = arg.split(':')
+            port = int(port)
+        else:
+            try:
+                port = int(sys.argv[1])
+            except:
+                host = sys.argv[1]
+    '''
+    server_address = (host, port)
+    print  "http://%s:%d" % (hostname, port)
+
+    HandlerClass.protocol_version = protocol
+    httpd = ServerClass(server_address, HandlerClass)
+
+    sa = httpd.socket.getsockname()
+    #print "Serving HTTP on", sa[0], "port", sa[1], "..."
+    httpd.serve_forever()
 
 if __name__ == '__main__':
-    test()
+    #test()
+    test2()
